@@ -1,0 +1,10 @@
+package com.blogapp.Practice.mapper;
+
+import org.mapstruct.MapperConfig;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+
+@MapperConfig(
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
+)
+public interface MapStructConfig {
+}
