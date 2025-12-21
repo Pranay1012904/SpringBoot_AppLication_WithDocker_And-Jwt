@@ -3,15 +3,13 @@ package com.blogapp.Practice.controller;
 import com.blogapp.Practice.dto.PostDto;
 import com.blogapp.Practice.entity.Post;
 import com.blogapp.Practice.mapper.PostMapper.PostDTOToEntity;
-import com.blogapp.Practice.mapper.PostMapper.PostEntityToDTO;
 import com.blogapp.Practice.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/post/api")
@@ -27,4 +25,18 @@ public class PostController {
         PostDto savedPost = postService.createPost(receivedPost);
         return new ResponseEntity<>(savedPost, HttpStatus.OK);
     }
+
+    @GetMapping("/getAllPosts")
+    public ResponseEntity<List<PostDto>> getAllPosts() {
+        List<PostDto> allPosts = postService.getAllPosts();
+        return new ResponseEntity<>(allPosts, HttpStatus.OK);
+    }
+
+    @GetMapping("/getPostById/rp")
+    public ResponseEntity<PostDto> getPostById(@RequestParam Long id) {
+        PostDto fetchedPost = postService.getPostById(id);
+        return new ResponseEntity<>(fetchedPost, HttpStatus.FOUND);
+    }
+
+
 }
