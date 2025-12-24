@@ -38,7 +38,17 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDto getPostById(Long id) {
-       Post fetchedPost= postRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format("POST WITH ID %d NOT FOUND !",id)));
-       return postEntityToDTO.postEntityToDTO(fetchedPost);
+        Post fetchedPost = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("POST WITH ID %d NOT FOUND !", id)));
+        return postEntityToDTO.postEntityToDTO(fetchedPost);
+    }
+
+    @Override
+    public PostDto updatePostById(PostDto postDTO, Long id) {
+        Post fetchedPost = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("POST WITH ID %d NOT FOUND!", id)));
+        fetchedPost.setContent(postDTO.getContent());
+        fetchedPost.setDescription(postDTO.getDescription());
+        fetchedPost.setTitle(postDTO.getTitle());
+        Post updatedPost=postRepository.save(fetchedPost);
+        return postEntityToDTO.postEntityToDTO(updatedPost);
     }
 }
