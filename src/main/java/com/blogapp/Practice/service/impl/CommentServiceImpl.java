@@ -12,6 +12,7 @@ import com.blogapp.Practice.service.CommentService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -31,5 +32,19 @@ public class CommentServiceImpl implements CommentService {
         Comment savedComment = commentRepository.save(comment);
 
         return commentEntityToDTOMapper.entityToDTO(savedComment);
+    }
+
+    @Override
+    public List<CommentDto> getAllComentsByPostId(Long postId) {
+        Post fetchedPost = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException(String.format("No Post With ID %d Found!", postId)));
+        List<Comment> comments = commentRepository.findCommentByPostId(postId);
+
+        return comments.stream().map(comment -> commentEntityToDTOMapper.entityToDTO(comment)).toList();
+    }
+
+    @Override
+    public CommentDto getCommentById(Long commentId) {
+        Comment fetchedComment = commentRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException(String.format("No Comment With Id %d Found!", commentId)));
+        return commentEntityToDTOMapper.entityToDTO(fetchedComment);
     }
 }

@@ -19,7 +19,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                     LocalDateTime.now(),
                     ex.getMessage(),
                     req.getDescription(false),
-                    "NO_SUCH_ID_POST"
+                    "NO_SUCH_RESOURCE"
             );
 
             ExceptionObject exceptionObject=new ExceptionObject(
