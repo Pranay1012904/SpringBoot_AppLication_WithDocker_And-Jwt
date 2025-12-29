@@ -7,6 +7,7 @@ import com.blogapp.Practice.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class PostController {
     PostService postService;
     PostDTOToEntity postDTOToEntity;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<PostDto> createPost(@RequestBody PostDto post) {
         Post receivedPost = postDTOToEntity.postDTOToEntity(post);
@@ -37,7 +39,7 @@ public class PostController {
         PostDto fetchedPost = postService.getPostById(id);
         return new ResponseEntity<>(fetchedPost, HttpStatus.FOUND);
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/updatePost/{id}")
     public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto,
                                               @PathVariable Long id) {
