@@ -1,5 +1,6 @@
 package com.blogapp.Practice.exception;
 
+import com.blogapp.Practice.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -28,4 +29,36 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             );
             return new ResponseEntity<>(exceptionObject, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ExceptionObject> handleuserNotFoundException(UserNotFoundException ex, WebRequest req){
+        ExceptionDetails exceptionDetails=new ExceptionDetails(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                req.getDescription(false),
+                "NO_SUCH_RESOURCE"
+        );
+
+        ExceptionObject exceptionObject=new ExceptionObject(
+                false,
+                List.of(exceptionDetails)
+        );
+        return new ResponseEntity<>(exceptionObject, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(BlogApiException.class)
+    public ResponseEntity<ExceptionObject> handleBlogApiException(BlogApiException ex, WebRequest req){
+        ExceptionDetails exceptionDetails=new ExceptionDetails(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                req.getDescription(false),
+                "NO_SUCH_RESOURCE"
+        );
+
+        ExceptionObject exceptionObject=new ExceptionObject(
+                false,
+                List.of(exceptionDetails)
+        );
+        return new ResponseEntity<>(exceptionObject, HttpStatus.BAD_REQUEST);
+    }
+
 }

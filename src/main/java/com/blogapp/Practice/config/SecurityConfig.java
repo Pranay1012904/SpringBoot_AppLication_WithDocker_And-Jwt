@@ -1,9 +1,12 @@
 package com.blogapp.Practice.config;
 
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -16,32 +19,46 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableMethodSecurity
+@AllArgsConstructor
 public class SecurityConfig {
+
+    private UserDetailsService userDetailsService;
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
         httpSecurity.csrf((csrf) -> csrf.disable()).authorizeHttpRequests((authorize) ->
-                //authorize.anyRequest().authenticated()
-                        authorize.requestMatchers(HttpMethod.GET,"/post/api/**").permitAll().anyRequest().authenticated())
+                        //authorize.anyRequest().authenticated()
+                        authorize
+                                .requestMatchers(HttpMethod.GET, "/post/api/**")
+                                .permitAll()
+                                .requestMatchers("/login/api/**")
+                                .permitAll()
+                                .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults());
         return httpSecurity.build();
     }
+//    @Bean
+//    public UserDetailsService userDetailsService(){
+//        UserDetails user_1= User.builder()
+//                .username("JOHN")
+//                .password(passwordEncoder().encode("john"))
+//                .roles("USER")
+//                .build();
+//        UserDetails admin= User.builder()
+//                .username("ADMIN")
+//                .password(passwordEncoder().encode("admin"))
+//                .roles("ADMIN")
+//                .build();
+//    return new InMemoryUserDetailsManager(user_1,admin);
+//    }
+
     @Bean
-    public UserDetailsService userDetailsService(){
-        UserDetails user_1= User.builder()
-                .username("JOHN")
-                .password(passwordEncoder().encode("john"))
-                .roles("USER")
-                .build();
-        UserDetails admin= User.builder()
-                .username("ADMIN")
-                .password(passwordEncoder().encode("admin"))
-                .roles("ADMIN")
-                .build();
-    return new InMemoryUserDetailsManager(user_1,admin);
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public static PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }

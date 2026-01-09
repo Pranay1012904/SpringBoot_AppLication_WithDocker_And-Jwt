@@ -20,7 +20,7 @@ public class PostController {
     PostService postService;
     PostDTOToEntity postDTOToEntity;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<PostDto> createPost(@RequestBody PostDto post) {
         Post receivedPost = postDTOToEntity.postDTOToEntity(post);
@@ -39,7 +39,7 @@ public class PostController {
         PostDto fetchedPost = postService.getPostById(id);
         return new ResponseEntity<>(fetchedPost, HttpStatus.FOUND);
     }
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/updatePost/{id}")
     public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto,
                                               @PathVariable Long id) {
