@@ -1,5 +1,6 @@
 package com.blogapp.Practice.controller;
 
+import com.blogapp.Practice.dto.JWTAuthResponse;
 import com.blogapp.Practice.dto.LoginDto;
 import com.blogapp.Practice.dto.RegisterDto;
 import com.blogapp.Practice.service.AuthService;
@@ -20,9 +21,11 @@ public class AuthenticationController {
     private AuthService authService;
 
     @PostMapping("/signin")
-    public ResponseEntity<String> log_in(@RequestBody LoginDto loginDto) {
-        String resp = authService.logging(loginDto);
-        return new ResponseEntity<>(resp, HttpStatus.OK);
+    public ResponseEntity<JWTAuthResponse> log_in(@RequestBody LoginDto loginDto) {
+        String token = authService.logging(loginDto);
+        JWTAuthResponse jwtAuthResponse=new JWTAuthResponse();
+        jwtAuthResponse.setAccessToken(token);
+        return new ResponseEntity<>(jwtAuthResponse, HttpStatus.OK);
     }
 
     //Register REST API

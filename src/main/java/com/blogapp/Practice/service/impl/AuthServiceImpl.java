@@ -7,6 +7,7 @@ import com.blogapp.Practice.entity.User;
 import com.blogapp.Practice.exception.BlogApiException;
 import com.blogapp.Practice.repository.RoleRepository;
 import com.blogapp.Practice.repository.UserRepository;
+import com.blogapp.Practice.security.JwtTokenProvider;
 import com.blogapp.Practice.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +28,7 @@ public class AuthServiceImpl implements AuthService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
+    private JwtTokenProvider jwtTokenProvider;
 
     @Override
     public String logging(LoginDto loginDto) {
@@ -34,7 +36,8 @@ public class AuthServiceImpl implements AuthService {
                 loginDto.getPassword()));
         //to store authentication object into spring security context holder
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return "User Logged In Successfully!";
+        String token= jwtTokenProvider.generateToken(authentication);
+        return token;
     }
 
     @Override
