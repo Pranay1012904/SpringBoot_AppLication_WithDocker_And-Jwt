@@ -4,7 +4,10 @@ import lombok.Data;
 
 @Data
 public class PostDto {
-    String title;
-    String description;
-    String content;
+    private Long id;
+    private String title;
+    private String description;
+    private String content;
+    private Long categoryId;
+
 }

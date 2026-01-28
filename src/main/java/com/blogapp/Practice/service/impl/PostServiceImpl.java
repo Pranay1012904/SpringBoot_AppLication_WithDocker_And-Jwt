@@ -1,9 +1,12 @@
 package com.blogapp.Practice.service.impl;
 
 import com.blogapp.Practice.dto.PostDto;
+import com.blogapp.Practice.entity.Category;
 import com.blogapp.Practice.entity.Post;
 import com.blogapp.Practice.exception.ResourceNotFoundException;
+import com.blogapp.Practice.mapper.PostMapper.PostDTOToEntity;
 import com.blogapp.Practice.mapper.PostMapper.PostEntityToDTO;
+import com.blogapp.Practice.repository.CategoryRepository;
 import com.blogapp.Practice.repository.PostRepository;
 import com.blogapp.Practice.service.PostService;
 import lombok.AllArgsConstructor;
@@ -15,13 +18,18 @@ import java.util.List;
 @AllArgsConstructor
 public class PostServiceImpl implements PostService {
 
-    PostRepository postRepository;
+    private PostRepository postRepository;
     //PostDTOToEntity postDTOToEntity;
-    PostEntityToDTO postEntityToDTO;
+    private PostEntityToDTO postEntityToDTO;
+    private PostDTOToEntity postDTOToEntity;
+    private CategoryRepository categoryRepository;
 
     @Override
-    public PostDto createPost(Post post) {
-        Post savedPost = postRepository.save(post);
+    public PostDto createPost(PostDto post) {
+        Post postMod = postDTOToEntity.postDTOToEntity(post);
+        Category fetchedCategory = categoryRepository.findById(post.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException(String.format("NO CATEGORY WITH ID %d FOUND", post.getCategoryId())));
+        postMod.setCategory(fetchedCategory);
+        Post savedPost = postRepository.save(postMod);
         return postEntityToDTO.postEntityToDTO(savedPost);
 
     }
@@ -48,7 +56,13 @@ public class PostServiceImpl implements PostService {
         fetchedPost.setContent(postDTO.getContent());
         fetchedPost.setDescription(postDTO.getDescription());
         fetchedPost.setTitle(postDTO.getTitle());
-        Post updatedPost=postRepository.save(fetchedPost);
+        Post updatedPost = postRepository.save(fetchedPost);
         return postEntityToDTO.postEntityToDTO(updatedPost);
+    }
+
+    @Override
+    public List<PostDto> findPostByCategoryId(Long id) {
+        List<Post> fetchedPosts = postRepository.findByCategoryId(id);
+        return fetchedPosts.stream().map(p->postEntityToDTO.postEntityToDTO(p)).toList();
     }
 }

@@ -13,5 +13,6 @@ public interface CategoryEntitytoDTO {
     @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")
     @Mapping(source = "description", target = "description")
+
     CategoryDto entityToDTO(Category category);
 }

@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(config = MapStructConfig.class, componentModel = "spring")
 public interface PostDTOToEntity {
+
     @Mapping(source = "title", target = "title")
     @Mapping(source = "description", target = "description")
     @Mapping(source = "content", target = "content")

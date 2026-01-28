@@ -23,8 +23,8 @@ public class PostController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<PostDto> createPost(@RequestBody PostDto post) {
-        Post receivedPost = postDTOToEntity.postDTOToEntity(post);
-        PostDto savedPost = postService.createPost(receivedPost);
+
+        PostDto savedPost = postService.createPost(post);
         return new ResponseEntity<>(savedPost, HttpStatus.OK);
     }
 
@@ -47,5 +47,10 @@ public class PostController {
         return new ResponseEntity<>(updatedPost,HttpStatus.OK);
     }
 
+    @GetMapping("/findByCategoryId")
+    public ResponseEntity<List<PostDto>> findByCategoryId(@RequestParam Long id){
+       List<PostDto> fetchedPosts= postService.findPostByCategoryId(id);
+        return new ResponseEntity<>(fetchedPosts,HttpStatus.OK);
+    }
 
 }

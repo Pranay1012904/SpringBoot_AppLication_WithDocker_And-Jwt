@@ -11,5 +11,6 @@ public interface PostEntityToDTO {
     @Mapping(source = "title", target = "title")
     @Mapping(source = "description", target = "description")
     @Mapping(source = "content", target = "content")
+    @Mapping(source = "category.id", target = "categoryId")
     PostDto postEntityToDTO(Post post);
 }

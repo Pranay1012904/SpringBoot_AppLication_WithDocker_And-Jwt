@@ -61,4 +61,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(exceptionObject, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionObject> handleIllegalArgumentException(BlogApiException ex, WebRequest req){
+        ExceptionDetails exceptionDetails=new ExceptionDetails(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                req.getDescription(false),
+                "BAD_REQUEST_EXCEPTION"
+        );
+
+        ExceptionObject exceptionObject=new ExceptionObject(
+                false,
+                List.of(exceptionDetails)
+        );
+        return new ResponseEntity<>(exceptionObject, HttpStatus.BAD_REQUEST);
+    }
+
 }
