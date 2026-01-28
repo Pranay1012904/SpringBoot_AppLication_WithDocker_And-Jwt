@@ -38,6 +38,8 @@ public class SecurityConfig {
                                 .permitAll()
                                 .requestMatchers("/login/api/**")
                                 .permitAll()
+                                .requestMatchers(HttpMethod.GET,"/category/api/**")
+                                .permitAll()
                                 .anyRequest().authenticated())
                 .exceptionHandling(exception-> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -19,6 +19,10 @@ public class Post {
     String description;
     @Column(nullable = false,unique = false)
     String content;
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.EAGER)
     Set<Comment> commentSet=new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
+    private Category category;
 }
